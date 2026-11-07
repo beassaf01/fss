@@ -1,10 +1,13 @@
-
-h1{
-    font-size: clamp(3.5rem, 7vw + 1.5rem, 6.5rem);
+* {
+    box-sizing: border-box; /* чтобы padding и border не раздували блоки шире экрана */
 }
 
-h3{
-    font-size: clamp(1.8rem, 4vw + 1rem, 3.5rem);
+h1 {
+    font-size: clamp(2.5rem, 6vw + 1rem, 6.5rem);
+}
+
+h3 {
+    font-size: clamp(1.5rem, 3.5vw + 0.5rem, 3.5rem);
 }
 
 .centered {
@@ -14,22 +17,33 @@ h3{
 body {
     background-color: black;
     color: white;
+    margin: 0;
+    padding: 0 clamp(1rem, 4vw, 3rem); /* плавные поля по краям экрана */
+    overflow-x: hidden;                /* защита от случайного горизонтального скролла */
 }
 
 .courses-cont, .plathorms-cont {
-    display:flex;
-    
+    display: flex;
+    align-items: center;               /* центрирует рамку и арт по вертикали друг относительно друга */
+    justify-content: space-between;
+    gap: clamp(1rem, 3vw, 3rem);       /* адаптивный отступ между рамкой и 3D-артом */
+}
+.logo-cont {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    justify-content: space-between;
+    z-index: 1;
 }
 
 .plathorms, .courses {
     position: relative;
-    min-width: 70%; 
+    flex: 1 1 65%;                     /* вместо жестких min-width: 70% блок гибко занимает ~65% места */
+    min-width: 0;                      /* позволяет флекс-блоку сжиматься на узких окнах */
     border: 1px solid white;
-    /* верхний padding учитывает нависающую легенду */
-    padding: 2rem 1rem 1rem;
-    margin-block: 3rem;
-
-    border-radius: 12px;
+    padding: clamp(2rem, 4vw, 3.5rem) clamp(1.5rem, 3vw, 2.5rem); /* адаптивные внутренние отступы */
+    margin-block: clamp(2rem, 5vw, 4rem);
+    border-radius: clamp(24px, 5vw, 100px); /* на большом экране 100px, на узком плавно уменьшается до 24px */
     background-color: #000;
 }
 
@@ -38,37 +52,42 @@ body {
 .courses > h3 {
     position: absolute;
     top: 0;
-    left: 1rem;                 /* отступ от левого края, как у <legend> */
-    transform: translateY(-80%);/* половина высоты — ровно по линии рамки */
+    left: clamp(2rem, 5vw, 5rem);      /* отступ заголовка двигается пропорционально радиусу скругления */
+    transform: translateY(-60%);       /* держит текст на линии рамки при любом размере шрифта */
+    margin: 0;
+    padding: 0 0.5rem;
+    background: #000;
+    line-height: 1;
+}
+
+/* Адаптивный масштаб для 3D ASCII-артов */
+#math-art, #it-art, #amplua-art {
+    flex: 0 0 auto;
+    font-family: monospace;      /* возвращаем дефолтный шрифт, как было с закомментированными стилями */
+    font-size: 13px;             /* четкий целый размер шрифта без размытия */
+    line-height: 1.15;           /* стандартная высота строки, без слипания и серости */
+    color: #ffffff;              /* чистый белый цвет */
 
     margin: 0;
-    padding: 0 .5rem;           /* зазор между текстом и линией */
-    background: #000;           /* маскирует рамку под текстом */
-    line-height: 1;             /* чтобы фон был аккуратной полоской */
+    white-space: pre;
+    user-select: none;
+
+    /* масштабируем блок целиком через zoom, чтобы шрифт не мылился в серый */
+    zoom: clamp(0.45, 0.08vw, 1);
 }
 
-
-
-/*art*/
-/*
-#math-art, #it-art {
-  font-family: Consolas, "Courier New", monospace;
-  font-size: 12px;
-  line-height: 12px;          
-  letter-spacing: 1px;
-  
-  height: calc(48 * 12px);    
-  width: 100ch;               
-  
-  overflow: hidden;           
-  white-space: pre;
-  margin: 0 auto;
-  transform: scale(0.85);
-  z-index: 1;
-  
-  contain: strict;           
+@media (max-width: 900px) {
+    .courses-cont, .plathorms-cont {
+        flex-direction: column;
+    }
+    .plathorms, .courses {
+        width: 100%;
+    }
+    #math-art, #it-art {
+        zoom: clamp(0.5, 0.15vw, 1);
+    }
 }
-*/
+
 #bg {
     position: fixed;
     inset: 0;
