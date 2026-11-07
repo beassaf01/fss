@@ -1,6 +1,6 @@
 // prog_binary_core.js
 (() => {
-  const pre = document.getElementById('it-art');
+  const pre = document.getElementById('4Dcube');
   if (!pre) return;
 
   const COLS = 100;
@@ -62,31 +62,14 @@
     const y2 = y * c2 - w1 * s2;
     const w2 = y * s2 + w1 * c2;
 
-    const scale = 1.45 / (2.6 - w2);
+    // Увеличили коэффициент с 1.45 до 2.65 — тессеракт теперь занимает почти весь холст
+    const scale = 2.65 / (2.8 - w2);
     return [x1 * scale, y2 * scale, z * scale];
   }
 
   function render() {
     zBuffer.fill(0);
     charBuffer.fill(' ');
-
-    for (let u = 0; u < Math.PI * 2; u += 0.03) {
-      for (let v = -0.55; v <= 0.55; v += 0.1) {
-        const halfU = u / 2;
-        const r = 2.55 + v * Math.cos(halfU);
-        const x = r * Math.cos(u);
-        const y = r * Math.sin(u);
-        const z = v * Math.sin(halfU);
-
-        const ny = Math.sin(u) * Math.sin(halfU);
-        const nz = -Math.cos(halfU);
-        const lum = (ny * 0.5 - nz * 0.5 + 1) * 0.5;
-
-        const bit = Math.floor(u * 8 + v * 10 - tick * 3) & 1;
-        const char = lum > 0.52 ? (bit ? '1' : '0') : (bit ? ':' : '.');
-        plot3D(x, y, z, char);
-      }
-    }
 
     const CODE_SYMS = "01{};&^|xF";
     const projected = vertices4D.map(project4Dto3D);
@@ -96,7 +79,8 @@
       const v1 = projected[p1];
       const v2 = projected[p2];
 
-      for (let t = 0; t <= 1; t += 0.04) {
+      // Шаг уменьшен с 0.04 до 0.015, чтобы длинные рёбра оставались сплошными
+      for (let t = 0; t <= 1; t += 0.015) {
         const x = v1[0] + (v2[0] - v1[0]) * t;
         const y = v1[1] + (v2[1] - v1[1]) * t;
         const z = v1[2] + (v2[2] - v1[2]) * t;

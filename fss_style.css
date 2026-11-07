@@ -31,16 +31,21 @@ body {
 .logo-cont {
     display: flex;
     align-items: center;
-    text-align: center;
-    justify-content: space-between;
+    justify-content: center;           /* собирает заголовок и арт вместе ровно по центру экрана */
+    gap: clamp(1rem, 4vw, 4rem);       /* аккуратное расстояние между надписью и артом */
     z-index: 1;
+}
+
+.logo-cont h1 {
+    margin: 0;                         /* убирает стандартные отступы h1, чтобы он стоял ровно по линии с артом */
+    text-align: center;
 }
 
 .plathorms, .courses {
     position: relative;
     flex: 1 1 65%;                     /* вместо жестких min-width: 70% блок гибко занимает ~65% места */
     min-width: 0;                      /* позволяет флекс-блоку сжиматься на узких окнах */
-    border: 1px solid white;
+    border: 5px solid white;
     padding: clamp(2rem, 4vw, 3.5rem) clamp(1.5rem, 3vw, 2.5rem); /* адаптивные внутренние отступы */
     margin-block: clamp(2rem, 5vw, 4rem);
     border-radius: clamp(24px, 5vw, 100px); /* на большом экране 100px, на узком плавно уменьшается до 24px */
@@ -63,27 +68,28 @@ body {
 /* Адаптивный масштаб для 3D ASCII-артов */
 #math-art, #it-art, #amplua-art {
     flex: 0 0 auto;
-    font-family: monospace;      /* возвращаем дефолтный шрифт, как было с закомментированными стилями */
-    font-size: 13px;             /* четкий целый размер шрифта без размытия */
-    line-height: 1.15;           /* стандартная высота строки, без слипания и серости */
-    color: #ffffff;              /* чистый белый цвет */
-
+    font-family: monospace;
+    font-size: 13px;
+    line-height: 1.15;
+    color: #ffffff;
+    text-align: left;                  /* защищает 3D-сетку из пробелов от смещения при центровке родителя */
     margin: 0;
     white-space: pre;
     user-select: none;
-
-    /* масштабируем блок целиком через zoom, чтобы шрифт не мылился в серый */
     zoom: clamp(0.45, 0.08vw, 1);
 }
 
 @media (max-width: 900px) {
-    .courses-cont, .plathorms-cont {
+    .logo-cont, .courses-cont, .plathorms-cont {
         flex-direction: column;
+    }
+    .plathorms-cont {
+        flex-direction: column-reverse;/* складывает элементы в обратном порядке: #4Dcube сверху, .courses снизу */
     }
     .plathorms, .courses {
         width: 100%;
     }
-    #math-art, #it-art {
+    #math-art, #it-art, #amplua-art {
         zoom: clamp(0.5, 0.15vw, 1);
     }
 }
